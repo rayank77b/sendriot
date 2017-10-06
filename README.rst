@@ -37,7 +37,7 @@ At moment it login with token, therefore you need a token.
 TODO
 ====
 
-* argument for config
 * debug info
 * login from password or login from token
 * store token in json
+* try/exceptions 
