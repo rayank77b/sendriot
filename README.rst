@@ -15,8 +15,8 @@ install matrix_client
    $ python setup.py build
    $ python setup.py install
 
-Use
-===
+Config
+======
 
 auth data:
 .. code-block:: javascript
@@ -29,3 +29,15 @@ auth data:
       "token":"adlfjaodfjfaodfjadosfundsoweiter"
     }
 
+Use
+===
+
+At moment it login with token, therefore you need a token.
+
+TODO
+====
+
+* argument for config
+* debug info
+* login from password or login from token
+* store token in json
