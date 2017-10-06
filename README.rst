@@ -19,7 +19,7 @@ Use
 ===
 
 auth data:
-.. code-block:: json
+.. code-block:: javascript
 
     {
       "username":"@blub:matrix.blub.de",
