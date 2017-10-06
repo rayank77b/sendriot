@@ -9,11 +9,18 @@ import getopt
 from matrix_client.client import MatrixClient, Room
 from matrix_client.api import MatrixHttpApi
 
+global debug
+
+def log(msg):
+    if debug:
+        print msg
+
 def help():
-    print 'sendriot.py -a </path/to/matrix.json>'
+    print 'sendriot.py -a </path/to/matrix.json> [-d]'
+    print '           -d debug infos'
 
 def loadCredentials(filename):
-    global password, username, server, roomid,atoken
+    global username, password, server, roomid, token
     json_data = open(filename)
     data = json.load(json_data)
     json_data.close()
@@ -21,8 +28,9 @@ def loadCredentials(filename):
     password = data["password"]
     server = data["server"]
     roomid = data["roomid"]
-    atoken = data["token"]
+    token = data["token"]
 
+debug=False
 # first read input text
 text=""
 for line in sys.stdin:
@@ -31,11 +39,13 @@ for line in sys.stdin:
 # get the path of matrix.json file
 matrixjson=""
 try:
-    opts, args = getopt.getopt(sys.argv[1:],"ha:",["authentication="])
+    opts, args = getopt.getopt(sys.argv[1:],"hda:",["authentication="])
 except getopt.GetoptError:
     help()
     sys.exit(2)
 for opt, arg in opts:
+    if opt == '-d':
+        debug=True
     if opt == '-h':
         help()
         sys.exit()
@@ -53,7 +63,7 @@ if not (os.path.exists(matrixjson) and os.access(matrixjson, os.R_OK)):
 # get the credentials
 loadCredentials(matrixjson)
 
-client = MatrixClient(server, token=atoken, user_id=username )
+client = MatrixClient(server, token=token, user_id=username )
 room = Room(client, roomid)
 room.send_text(text)
 
