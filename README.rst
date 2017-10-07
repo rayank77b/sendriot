@@ -37,7 +37,6 @@ At moment it login with token, therefore you need a token.
 TODO
 ====
 
-* debug info
-* login from password or login from token
 * store token in json
 * try/exceptions 
+* join a room

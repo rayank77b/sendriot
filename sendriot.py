@@ -9,7 +9,7 @@ import getopt
 from matrix_client.client import MatrixClient, Room
 from matrix_client.api import MatrixHttpApi
 
-global debug
+global debug, loginme
 
 def log(msg):
     if debug:
@@ -18,6 +18,7 @@ def log(msg):
 def help():
     print 'sendriot.py -a </path/to/matrix.json> [-d]'
     print '           -d debug infos'
+    print '           -p login with password, rahter token'
 
 def loadCredentials(filename):
     global username, password, server, roomid, token
@@ -31,6 +32,8 @@ def loadCredentials(filename):
     token = data["token"]
 
 debug=False
+loginme=False
+
 # first read input text
 text=""
 for line in sys.stdin:
@@ -39,11 +42,13 @@ for line in sys.stdin:
 # get the path of matrix.json file
 matrixjson=""
 try:
-    opts, args = getopt.getopt(sys.argv[1:],"hda:",["authentication="])
+    opts, args = getopt.getopt(sys.argv[1:],"hpda:",["authentication="])
 except getopt.GetoptError:
     help()
     sys.exit(2)
 for opt, arg in opts:
+    if opt == '-p':
+        loginme=True
     if opt == '-d':
         debug=True
     if opt == '-h':
@@ -63,7 +68,14 @@ if not (os.path.exists(matrixjson) and os.access(matrixjson, os.R_OK)):
 # get the credentials
 loadCredentials(matrixjson)
 
-client = MatrixClient(server, token=token, user_id=username )
+client =None
+
+if loginme :
+    client = MatrixClient(server)
+    token = client.login_with_password(username, password)
+else:
+    client = MatrixClient(server, token=token, user_id=username)
+
 room = Room(client, roomid)
 room.send_text(text)
 
