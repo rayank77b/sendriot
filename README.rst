@@ -19,7 +19,7 @@ Config
 ======
 
 auth data:
-.. code-block:: javascript
+.. code-block:: bash
 
     {
         "username":"@blub:matrix.blub.de",
