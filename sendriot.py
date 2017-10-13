@@ -16,9 +16,11 @@ def log(msg):
         print msg
 
 def help():
-    print 'sendriot.py -a </path/to/matrix.json> [-d]'
+    print 'sendriot.py -a </path/to/matrix.json> [-d -p -e roomid]'
     print '           -d debug infos'
     print '           -p login with password, rahter token'
+    print '           -e     : enter room  !blublbu:matrix.blub.de,'
+    print '                    the roomid should be in .matrix.json file'
 
 def loadCredentials(filename):
     global username, password, server, roomid, token
@@ -33,29 +35,34 @@ def loadCredentials(filename):
 
 debug=False
 loginme=False
-
-# first read input text
-text=""
-for line in sys.stdin:
-    text = text + "\n"+line
+enterroom=False
 
 # get the path of matrix.json file
 matrixjson=""
 try:
-    opts, args = getopt.getopt(sys.argv[1:],"hpda:",["authentication="])
+    opts, args = getopt.getopt(sys.argv[1:],"hpdea:",["authentication="])
 except getopt.GetoptError:
     help()
     sys.exit(2)
 for opt, arg in opts:
     if opt == '-p':
-        loginme=True
+        loginme = True
     if opt == '-d':
-        debug=True
+        debug = True
     if opt == '-h':
         help()
         sys.exit()
+    if opt in ("-e"):
+        enterroom = True
     elif opt in ("-a", "--authentication"):
         matrixjson = arg
+
+
+# read input text
+text=""
+if not enterroom:
+    for line in sys.stdin:
+        text = text + "\n"+line
 
 if matrixjson=="" :
     help()
@@ -73,11 +80,17 @@ client =None
 if loginme :
     client = MatrixClient(server)
     token = client.login_with_password(username, password)
+    log(token)
 else:
     client = MatrixClient(server, token=token, user_id=username)
 
-room = Room(client, roomid)
-room.send_text(text)
+if enterroom:
+    room = client.join_room(roomid)
+    log("entered room: %s"%roomid)
+else:
+    room = Room(client, roomid)
+    room.send_text(text)
+
 
 
 
