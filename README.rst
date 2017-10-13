@@ -22,21 +22,41 @@ auth data:
 .. code-block:: javascript
 
     {
-      "username":"@blub:matrix.blub.de",
-      "password":"xxxx",
-      "server":"https://matrix.blub.de:443",
-      "roomid":"!blublub:matrix.blub.de",
-      "token":"adlfjaodfjfaodfjadosfundsoweiter"
+        "username":"@blub:matrix.blub.de",
+        "password":"xxxx",
+        "server":"https://matrix.blub.de:443",
+        "roomid":"!blublub:matrix.blub.de",
+        "token":"adlfjaodfjfaodfjadosfundsoweiter"
     }
 
 Use
 ===
 
-At moment it login with token, therefore you need a token.
+.. code-block:: bash
+  sendriot.py -a </path/to/matrix.json> [-d -p -e roomid]
+           -d debug infos
+           -p login with password, rahter token
+           -e     : enter room  !blublbu:matrix.blub.de,
+                    the roomid should be in .matrix.json file
+
+
+You need a username+password+roomid+server, this must be set in matrix.json file.
+
+Get the Token:
+* echo "test"  | python sendrio.py -a /path/to/.matrix.json -d -p
+
+Enter room with password:
+* python sendrio.py -a /path/to/.matrix.json -d -p -e 
+
+Enter room with token:
+* python sendrio.py -a /path/to/.matrix.json -d -e
+
+Send Messages:
+echo "my Messages ...." | * python sendrio.py -a /path/to/.matrix.json
+
 
 TODO
 ====
 
 * store token in json
 * try/exceptions 
-* join a room
